@@ -1,3 +1,12 @@
 package models
 
-// TODO: Implement user model
+import "time"
+
+type User struct {
+	ID        uint      `gorm:"primaryKey"`
+	Username  string    `gorm:"unique"`
+	Email     string    `gorm:"unique"`
+	Password  string    `gorm:"not null"`
+	CreatedAt time.Time `gorm:"autoCreateTime"`
+	UpdatedAt time.Time `gorm:"autoUpdateTime"`
+}
