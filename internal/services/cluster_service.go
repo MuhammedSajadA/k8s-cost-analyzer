@@ -5,19 +5,19 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-    
+
 	"github.com/MuhammedSajadA/k8s-cost-analyzer/internal/models"
+	"github.com/MuhammedSajadA/k8s-cost-analyzer/internal/repositories"
 	"github.com/MuhammedSajadA/k8s-cost-analyzer/pkg/k8s"
 )
 
 type ClusterService struct {
-	db *gorm.DB
+	repo *repositories.ClusterRepository
 }
 
-func NewClusterService(db *gorm.DB) *ClusterService {
-	return &ClusterService{db: db}
+func NewClusterService(repo *repositories.ClusterRepository) *ClusterService {
+	return &ClusterService{repo: repo}
 }
 
 func (s *ClusterService) AddCluster(
@@ -48,5 +48,26 @@ func (s *ClusterService) AddCluster(
 		Kubeconfig: string(kubeconfig),
 	}
 
-	return s.db.Create(&cluster).Error
+	return s.repo.Create(&cluster)
 }
+func (s *ClusterService) ListNamespaces(
+	userID string,
+	clusterID string,
+) ([]string, error) {
+
+	// 1️⃣ Verify ownership
+	cluster, err := s.repo.FindByIDAndUser(clusterID, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	// 2️⃣ Build K8s client
+	clientset, err := k8s.NewClient([]byte(cluster.Kubeconfig))
+	if err != nil {
+		return nil, err
+	}
+
+	// 3️⃣ Fetch namespaces
+	return k8s.ListNamespaces(clientset)
+}
+
