@@ -9,7 +9,7 @@ This project serves as the foundation of a multi-tenant SaaS for analyzing Kuber
 - Show optimization suggestions
 
 ---
-## 🚀 MVP Features
+## 🎯 Project Goals
 
 - JWT-based user authentication
 - Secure cluster connection via kubeconfig upload
@@ -38,11 +38,11 @@ This project serves as the foundation of a multi-tenant SaaS for analyzing Kuber
 - JWT-based user authentication
 - Secure Kubernetes cluster onboarding via kubeconfig
 - Cluster connectivity validation using `client-go`
+- Namespace discovery from onboarded clusters
 - Multi-tenant cluster ownership enforcement
 - Clean layered architecture (handler / service / repository)
 
-> ℹ️ This repository currently covers functionality **up to cluster onboarding**.  
-> Namespace listing, metrics collection, and cost analysis are planned next.
+> ℹ️ This repository currently focuses on the **backend foundation** required to build a Kubernetes cost analysis platform.
 
 ---
 
@@ -59,7 +59,7 @@ This project serves as the foundation of a multi-tenant SaaS for analyzing Kuber
 
 ## 🧭 Next Steps (Planned)
 
-- Namespace listing per cluster
+- Pod discovery per namespace
 - CPU & memory metrics via metrics.k8s.io
 - Waste calculation & cost estimation
 - Frontend dashboard
